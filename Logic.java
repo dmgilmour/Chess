@@ -33,6 +33,9 @@ public class Logic {
 		} else if (_selectedPiece.canMove(p.getRank(), p.getFile())) { 
 			System.out.println("Second Click");
 			_selectedPiece.move(p.getRank(), p.getFile());
+			if (p.getPlayer() != _curPlayer) {
+		 		p.remove();
+			}
 			_selectionBeenMade = false;
 			nextTurn();
 		} else {
@@ -42,6 +45,8 @@ public class Logic {
 
 	public void nextTurn() {
 		System.out.println("Next Turn");
+		System.out.println("White: " + _white.getPieces().size());
+		System.out.println("Black: " + _black.getPieces().size());
 		if (_curPlayer == _white) {
 			_curPlayer = _black;
 		} else {

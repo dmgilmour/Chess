@@ -1,4 +1,3 @@
-
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -14,8 +13,8 @@ public class BoardPanel extends JPanel {
 
 	public BoardPanel() {
 
-		_white = new Player(0);
-		_black = new Player(1);
+		_white = new Player("White", 0);
+		_black = new Player("Black", 1);
 		_logic = new Logic(this, _white, _black);
 		_board = new Piece[8][8];
 		for (int i = 0; i < 8; i++) {
@@ -42,34 +41,45 @@ public class BoardPanel extends JPanel {
 
 				
 	public void display(Player player) {
-		
-		// Needs better name because also used for files when flipping board
-		int startingRank = player.getNum() == 0 ? 7 : 0;
-		int direction = player.getNum() == 0 ? -1 : 1;
-
-		for (int i = startingRank; i < 8 && i >= 0; i += direction) {
-			for (int j = startingRank; j < 8 && j >= 0; j += direction) {
-				Piece p = _board[i][j];
-				JButton sq = _display[i][j];
-				sq.setText(p.toString());
-				for (ActionListener al : sq.getActionListeners()) {
-					sq.removeActionListener(al);
-				}
-				
-				sq.addActionListener(p.getListener());
+		for (int i = 7; i >= 0; i--) {
+			for (int j = 7; j >= 0; j--) {
+				update(_board[i][j], player);
 				if ((i + j) % 2 == 0) {
-					sq.setBackground(new Color(0xF5F5DC));
-					sq.setForeground(Color.BLACK);
+					_display[i][j].setBackground(new Color(0xf0d9b5));
+					_display[i][j].setForeground(Color.BLACK);
 				} else {
-					sq.setBackground(new Color(0x392613));
-					sq.setForeground(Color.WHITE);
+					_display[i][j].setBackground(new Color(0xb58863));
+					_display[i][j].setForeground(Color.WHITE);
 				}
-				sq.setPreferredSize(new Dimension(100, 100));
-				sq.setMaximumSize(new Dimension(150, 150));
-				_display[i][j] = sq;
-				this.add(sq);
 			}
 		}
 		this.setVisible(true);
 	}
+
+	public void update(Piece piece, Player player) {
+		int rank;
+		int file;
+		if (player.getNum() == 0) {
+			rank = piece.getRank();
+			file = piece.getFile();
+		} else {
+			rank = 7 - piece.getRank();
+			file = 7 - piece.getFile();
+		}
+			
+		JButton sq = _display[rank][file];
+		//sq.setText(piece.toString());
+		for (ActionListener al : sq.getActionListeners()) {
+			sq.removeActionListener(al);
+		}
+		
+		sq.addActionListener(piece.getListener());
+		sq.setPreferredSize(new Dimension(100, 100));
+		sq.setMaximumSize(new Dimension(150, 150));
+		ImageIcon image = new ImageIcon(getClass().getResource(("resources/" + piece.toString() + ".png")));
+		image = new ImageIcon(image.getImage().getScaledInstance(110, 110,  java.awt.Image.SCALE_SMOOTH));
+		sq.setIcon(image);
+		this.add(sq);
+	}
+
 }

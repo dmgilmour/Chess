@@ -8,7 +8,7 @@ public class Queen extends Piece {
 
 	@Override
 	public String toString() {
-		return (_player.getNum() == 0 ? "White" : "Black") + " Queen";
+		return _player.toString() + "-Queen";
 	}
 
 	@Override

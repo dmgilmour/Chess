@@ -7,6 +7,11 @@ public class NullPiece extends Piece {
 
 	@Override
 	public String toString() {
-		return "";
+		return "Null";
+	}
+
+	@Override
+	public void remove() {
+		return;
 	}
 }

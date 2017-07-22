@@ -7,7 +7,7 @@ public class Rook extends Piece {
 
 	@Override
 	public String toString() {
-		return (_player.getNum() == 0 ? "White" : "Black") + " Rook";
+		return _player.toString() + "-Rook";
 	}
 
 	@Override

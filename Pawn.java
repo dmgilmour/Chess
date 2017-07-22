@@ -7,7 +7,7 @@ public class Pawn extends Piece {
 
 	@Override
 	public String toString() {
-		return (_player.getNum() == 0 ? "White" : "Black") + " Pawn";
+		return _player.toString() + "-Pawn";
 	}
 
 	@Override

@@ -1,4 +1,5 @@
 import java.awt.event.*;
+import javax.swing.*;
 
 public abstract class Piece {
 	
@@ -47,6 +48,10 @@ public abstract class Piece {
 		return _player;
 	}
 
+	public ImageIcon getImage() {
+		return null;
+	}
+
 	public boolean canMove(int desiredRank, int desiredFile) {
 		if (!boundsCheck(desiredRank) || !boundsCheck(desiredFile)) {
 			return false;
@@ -69,6 +74,10 @@ public abstract class Piece {
 		} else {
 			return false;
 		}
+	}
+
+	public void remove() {
+		_player.getPieces().remove(this);
 	}
 
 	public boolean boundsCheck(int location) {

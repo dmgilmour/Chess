@@ -4,8 +4,10 @@ public class Player {
 
 	private ArrayList<Piece> _pieces;
 	private int _num;
+	private String _str;
 
-	public Player(int num) {
+	public Player(String str, int num) {
+		_str = str;
 		_num = num;
 		_pieces = new ArrayList<Piece>(16);
 	}
@@ -27,6 +29,10 @@ public class Player {
 
 	public int getNum() {
 		return _num;
+	}
+
+	public String toString() {
+		return _str;
 	}
 
 	public ArrayList<Piece> getPieces() {
