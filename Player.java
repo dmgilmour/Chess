@@ -39,6 +39,10 @@ public class Player {
 		return _pieces;
 	}
 
+	public Piece getKing() {
+		return _pieces.get(_pieces.size() - 1);
+	}
+
 	public void placePieces(Piece[][] board) {
 		for (Piece p : _pieces) {
 			board[p.getRank()][p.getFile()] = p;

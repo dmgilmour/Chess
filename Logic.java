@@ -26,11 +26,14 @@ public class Logic {
 			System.out.println("Piece Selected");
 			_selectionBeenMade = true;
 			_selectedPiece = p;
+			_boardPanel.highlightPiece(_selectedPiece, _curPlayer);
 		} else if (p == _selectedPiece) {
 			System.out.println("Undoing select");
+			_boardPanel.unhighlightPiece(_selectedPiece, _curPlayer);
 			_selectionBeenMade = false;
 			_selectedPiece = null;
 		} else if (_selectionBeenMade && p.getPlayer() == _curPlayer) {
+			_boardPanel.blinkPiece(_selectedPiece, _curPlayer);
 			System.out.println("Blocked by your piece");
 		} else if (_selectedPiece.canMove(p.getRank(), p.getFile())) { 
 			System.out.println("Second Click");
@@ -48,8 +51,10 @@ public class Logic {
 					
 			} catch (Exception e) {
 				System.out.println("Puts you in check");
+				_boardPanel.blinkPiece(_curPlayer.getKing(), _curPlayer);
 			}
 		} else {
+			_boardPanel.blinkPiece(_selectedPiece, _curPlayer);
 			System.out.println("Invalid movement for this piece");
 		}
 	}

@@ -1,12 +1,14 @@
 import java.awt.*;
 import java.awt.event.*;
+import javax.swing.Timer;
 import javax.swing.*;
 import java.util.*;
 
 public class BoardPanel extends JPanel {
 
-	public final int BLINK_DURATION = 4000;
-	public final int BLINK_COUNT = 4;
+	private static final int TIMER_DELAY = 200;
+	private static final int MAX_TIME = 1250;
+	private static final String READY = "ready";
 
 	private Piece[][] _board;
 	private JButton[][] _display;
@@ -42,6 +44,8 @@ public class BoardPanel extends JPanel {
 		_logic.registerClick(temp);
 	}
 
+
+	
 				
 	public void display(Player player) {
 		for (int i = 7; i >= 0; i--) {
@@ -49,10 +53,8 @@ public class BoardPanel extends JPanel {
 				update(_board[i][j], player);
 				if ((i + j) % 2 == 0) {
 					_display[i][j].setBackground(new Color(0xf0d9b5));
-					_display[i][j].setForeground(Color.BLACK);
 				} else {
 					_display[i][j].setBackground(new Color(0xb58863));
-					_display[i][j].setForeground(Color.WHITE);
 				}
 			}
 		}
@@ -85,4 +87,70 @@ public class BoardPanel extends JPanel {
 		this.add(sq);
 	}
 
+	public void blinkPiece(Piece piece, Player curPlayer) {
+		int rank;
+		int file;
+		if (curPlayer.getNum() == 0) {
+			rank = piece.getRank();
+			file = piece.getFile();
+		} else {
+			rank = 7 - piece.getRank();
+			file = 7 - piece.getFile();
+		}
+		JButton sq = _display[rank][file];
+		Color prevColor = sq.getBackground();
+		Timer blinkTimer = new Timer(TIMER_DELAY, new ActionListener() {
+			private int count = 0;
+			private boolean on = false;
+
+			public void actionPerformed(ActionEvent e) {
+				if (count * TIMER_DELAY >= MAX_TIME) {
+					sq.setBackground(prevColor);
+					((Timer) e.getSource()).stop();
+				} else {
+					if (on) {
+						sq.setBackground(Color.RED);
+					} else {
+						sq.setBackground(prevColor);
+					}
+					on = !on;
+					count++;
+				}
+			}
+		});
+		blinkTimer.start();
+	}
+
+	public void highlightPiece(Piece piece, Player curPlayer) {
+		int rank;
+		int file;
+		if (curPlayer.getNum() == 0) {
+			rank = piece.getRank();
+			file = piece.getFile();
+		} else {
+			rank = 7 - piece.getRank();
+			file = 7 - piece.getFile();
+		}
+		_display[rank][file].setBackground(Color.YELLOW);
+	}
+
+	public void unhighlightPiece(Piece piece, Player curPlayer) {
+		int rank;
+		int file;
+		if (curPlayer.getNum() == 0) {
+			rank = piece.getRank();
+			file = piece.getFile();
+		} else {
+			rank = 7 - piece.getRank();
+			file = 7 - piece.getFile();
+		}
+		if ((rank + file) % 2 == 0) {
+			_display[rank][file].setBackground(new Color(0xf0d9b5));
+		} else {
+			_display[rank][file].setBackground(new Color(0xb58863));
+		}
+	}
+
+		
+		
 }
