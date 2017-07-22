@@ -16,7 +16,7 @@ public class Knight extends Piece {
 		if (!super.canMove(desiredRank, desiredFile)) {
 			return false;
 		} else {
-			return ((Math.abs(desiredRank) == 2 && Math.abs(desiredFile) == 1) || (Math.abs(desiredRank) == 1 && Math.abs(desiredFile) == 2));
+			return ((Math.abs(desiredRank - _rank) == 2 && Math.abs(desiredFile - _file) == 1) || (Math.abs(desiredRank - _rank) == 1 && Math.abs(desiredFile - _file) == 2));
 		}
 	}
 }

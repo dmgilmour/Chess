@@ -1,5 +1,6 @@
 
 import java.awt.*;
+import java.awt.event.*;
 import javax.swing.*;
 import java.util.*;
 
@@ -24,38 +25,41 @@ public class BoardPanel extends JPanel {
 		_board.setPlayerPieces(_black);
 
 		_display = new JButton[8][8];
-		initializeDisplay();
-		display(_board);
+		for (int i = 0; i < 8; i++) {
+			for (int j = 0; j < 8; j++) {
+				_display[i][j] = new JButton();
+			}
+		}
+		this.setLayout(new GridLayout(8, 8));
+		display(_white);
 		Piece temp = new NullPiece(0, 0, _logic);
 		_logic.registerClick(temp);
 	}
 
 				
-				
-	private void initializeDisplay() {
-		this.setLayout(new GridLayout(8, 8));
-		for (int i = 0; i < 8; i++) {
-			for (int j = 0; j < 8; j++) {
-				_display[i][j] = new JButton();
-				_display[i][j].setPreferredSize(new Dimension(100, 100));
-				_display[i][j].setMaximumSize(new Dimension(150, 150));
-				if ((i + j) % 2 == 0) {
-					_display[i][j].setBackground(new Color(0xF5F5DC));
-				} else {
-					_display[i][j].setBackground(new Color(0x392613));
+	public void display(Player player) {
+		
+		for (int i = (player.getNum() == 0 ? 7 : 0); i < 8 && i >= 0; i += player.getNum() == 0 ? -1 : 1) {
+			for (int j = (player.getNum() == 0 ? 7 : 0); j < 8 && j >= 0; j += player.getNum() == 0 ? -1 : 1) {
+				Piece p = _board.getBoard()[i][j];
+				JButton sq = _display[i][j];
+				sq.setText(p.toString());
+				for (ActionListener al : sq.getActionListeners()) {
+					sq.removeActionListener(al);
 				}
-				this.add(_display[i][j]);
+				
+				sq.addActionListener(p.getListener());
+				if ((i + j) % 2 == 1) {
+					sq.setBackground(new Color(0xF5F5DC));
+				} else {
+					sq.setBackground(new Color(0x392613));
+				}
+				sq.setPreferredSize(new Dimension(100, 100));
+				sq.setMaximumSize(new Dimension(150, 150));
+				_display[i][j] = sq;
+				this.add(sq);
 			}
 		}
-	}
-
-	private void display(Board board) {
-		for (Piece[] row : board.getBoard()) {
-			for (Piece p : row) {
-				if (p instanceof NullPiece) System.out.println("Ayyo");
-				_display[p.getRank()][p.getFile()].setText(p.toString());
-				_display[p.getRank()][p.getFile()].addActionListener(p.getListener());
-			}
-		}
+		this.setVisible(true);
 	}
 }

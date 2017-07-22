@@ -3,8 +3,8 @@ import java.awt.event.*;
 public abstract class Piece {
 	
 	private Piece _this = this;
-	private int _rank;
-	private int _file;
+	protected int _rank;
+	protected int _file;
 	protected Player _player;
 	protected Board _board;
 	protected Logic _logic;
@@ -57,8 +57,10 @@ public abstract class Piece {
 
 	public boolean move(int desiredRank, int desiredFile) {
 		if (canMove(desiredRank, desiredFile)) {
+			_board.getBoard()[_rank][_file] = new NullPiece(_rank, _file, _logic);
 			this.setRank(desiredRank);
 			this.setFile(desiredFile);
+			_board.getBoard()[_rank][_file] = this;
 			return true;
 		} else {
 			return false;
@@ -71,10 +73,6 @@ public abstract class Piece {
 
 	public ActionListener getListener() {
 		return _clickListener;
-	}
-
-	public Piece get() {
-		return _this;
 	}
 
 	class ClickListener implements ActionListener {

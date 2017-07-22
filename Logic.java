@@ -30,17 +30,23 @@ public class Logic {
 			_selectedPiece = null;
 		} else if (_selectionBeenMade && p.getPlayer() == _curPlayer) {
 			System.out.println("Nope");
-		} else {
+		} else if (_selectedPiece.canMove(p.getRank(), p.getFile())) { 
 			System.out.println("Second Click");
+			_selectedPiece.move(p.getRank(), p.getFile());
 			_selectionBeenMade = false;
+			nextTurn();
+		} else {
+			System.out.println("Fail");
 		}
 	}
 
 	public void nextTurn() {
+		System.out.println("Next Turn");
 		if (_curPlayer == _white) {
 			_curPlayer = _black;
 		} else {
 			_curPlayer = _white;
 		}
+		_boardPanel.display(_curPlayer);
 	}
 }
