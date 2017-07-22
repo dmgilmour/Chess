@@ -5,6 +5,9 @@ import java.util.*;
 
 public class BoardPanel extends JPanel {
 
+	public final int BLINK_DURATION = 4000;
+	public final int BLINK_COUNT = 4;
+
 	private Piece[][] _board;
 	private JButton[][] _display;
 	private Logic _logic;
@@ -56,10 +59,10 @@ public class BoardPanel extends JPanel {
 		this.setVisible(true);
 	}
 
-	public void update(Piece piece, Player player) {
+	public void update(Piece piece, Player curPlayer) {
 		int rank;
 		int file;
-		if (player.getNum() == 0) {
+		if (curPlayer.getNum() == 0) {
 			rank = piece.getRank();
 			file = piece.getFile();
 		} else {
