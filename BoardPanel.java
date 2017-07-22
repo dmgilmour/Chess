@@ -49,10 +49,12 @@ public class BoardPanel extends JPanel {
 				}
 				
 				sq.addActionListener(p.getListener());
-				if ((i + j) % 2 == 1) {
+				if ((i + j) % 2 == 0) {
 					sq.setBackground(new Color(0xF5F5DC));
+					sq.setForeground(Color.BLACK);
 				} else {
 					sq.setBackground(new Color(0x392613));
+					sq.setForeground(Color.WHITE);
 				}
 				sq.setPreferredSize(new Dimension(100, 100));
 				sq.setMaximumSize(new Dimension(150, 150));

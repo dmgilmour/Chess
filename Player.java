@@ -20,8 +20,8 @@ public class Player {
 		_pieces.add(new Knight(((_num == 0) ? 0 : 7), 6, this, board, logic));
 		_pieces.add(new Bishop(((_num == 0) ? 0 : 7), 2, this, board, logic));
 		_pieces.add(new Bishop(((_num == 0) ? 0 : 7), 5, this, board, logic));
-		_pieces.add(new Queen(((_num == 0) ? 0 : 7), 3, this, board, logic));
-		_pieces.add(new King(((_num == 0) ? 0 : 7), 4, this, board, logic));
+		_pieces.add(new King(((_num == 0) ? 0 : 7), 3, this, board, logic));
+		_pieces.add(new Queen(((_num == 0) ? 0 : 7), 4, this, board, logic));
 	}
 
 	public int getNum() {
