@@ -6,7 +6,7 @@ import java.util.*;
 
 public class BoardPanel extends JPanel {
 
-	private Board _board;
+	private Piece[][] _board;
 	private JButton[][] _display;
 	private Logic _logic;
 	private Player _white;
@@ -17,12 +17,16 @@ public class BoardPanel extends JPanel {
 		_white = new Player(0);
 		_black = new Player(1);
 		_logic = new Logic(this, _white, _black);
-		_board = new Board(this, _logic);
+		_board = new Piece[8][8];
+		for (int i = 0; i < 8; i++) {
+			for (int j = 0; j < 8; j++) {
+				_board[i][j] = new NullPiece(i, j, _logic);
+			}
+		}
 
 		_white.initializePieces(_board, _logic);
 		_black.initializePieces(_board, _logic);
-		_board.setPlayerPieces(_white);
-		_board.setPlayerPieces(_black);
+
 
 		_display = new JButton[8][8];
 		for (int i = 0; i < 8; i++) {
@@ -39,9 +43,13 @@ public class BoardPanel extends JPanel {
 				
 	public void display(Player player) {
 		
-		for (int i = (player.getNum() == 0 ? 7 : 0); i < 8 && i >= 0; i += player.getNum() == 0 ? -1 : 1) {
-			for (int j = (player.getNum() == 0 ? 7 : 0); j < 8 && j >= 0; j += player.getNum() == 0 ? -1 : 1) {
-				Piece p = _board.getBoard()[i][j];
+		// Needs better name because also used for files when flipping board
+		int startingRank = player.getNum() == 0 ? 7 : 0;
+		int direction = player.getNum() == 0 ? -1 : 1;
+
+		for (int i = startingRank; i < 8 && i >= 0; i += direction) {
+			for (int j = startingRank; j < 8 && j >= 0; j += direction) {
+				Piece p = _board[i][j];
 				JButton sq = _display[i][j];
 				sq.setText(p.toString());
 				for (ActionListener al : sq.getActionListeners()) {

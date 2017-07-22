@@ -2,7 +2,7 @@ import static java.lang.Math.abs;
 
 public class Queen extends Piece {
 
-	public Queen(int rank, int file, Player player, Board board, Logic logic) {
+	public Queen(int rank, int file, Player player, Piece[][] board, Logic logic) {
 		super(rank, file, player, board, logic);
 	}
 
@@ -23,7 +23,7 @@ public class Queen extends Piece {
 			int f = _file + fileDir;
 
 			while (r != desiredRank || f != desiredFile) {
-				if (_board.getBoard()[r][f].getPlayer() != null) {
+				if (_board[r][f].getPlayer() != null) {
 					return false;
 				}
 				r += rankDir;

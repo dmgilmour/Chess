@@ -10,7 +10,7 @@ public class Player {
 		_pieces = new ArrayList<Piece>(16);
 	}
 
-	public void initializePieces(Board board, Logic logic) {
+	public void initializePieces(Piece[][] board, Logic logic) {
 		for (int i = 0; i < 8; i++) {
 			_pieces.add(new Pawn(((_num == 0) ? 1 : 6), i, this, board, logic));	
 		}
@@ -22,6 +22,7 @@ public class Player {
 		_pieces.add(new Bishop(((_num == 0) ? 0 : 7), 5, this, board, logic));
 		_pieces.add(new King(((_num == 0) ? 0 : 7), 3, this, board, logic));
 		_pieces.add(new Queen(((_num == 0) ? 0 : 7), 4, this, board, logic));
+		placePieces(board);
 	}
 
 	public int getNum() {
@@ -30,6 +31,13 @@ public class Player {
 
 	public ArrayList<Piece> getPieces() {
 		return _pieces;
+	}
+
+	public void placePieces(Piece[][] board) {
+		for (Piece p : _pieces) {
+			board[p.getRank()][p.getFile()] = p;
+		}
+			
 	}
 }
 		

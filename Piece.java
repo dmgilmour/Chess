@@ -6,14 +6,14 @@ public abstract class Piece {
 	protected int _rank;
 	protected int _file;
 	protected Player _player;
-	protected Board _board;
+	protected Piece[][] _board;
 	protected Logic _logic;
 
 	protected boolean _hasMoved;
 
 	private ClickListener _clickListener;
 	
-	public Piece(int rank, int file, Player player, Board board, Logic logic) {
+	public Piece(int rank, int file, Player player, Piece[][] board, Logic logic) {
 		_rank = rank;
 		_file = file;
 		_player = player;
@@ -51,7 +51,7 @@ public abstract class Piece {
 		if (!boundsCheck(desiredRank) || !boundsCheck(desiredFile)) {
 			return false;
 		}
-		if (_board.getBoard()[desiredRank][desiredFile].getPlayer() == _player) {
+		if (_board[desiredRank][desiredFile].getPlayer() == _player) {
 			return false;
 		} else {
 			return true;
@@ -60,10 +60,10 @@ public abstract class Piece {
 
 	public boolean move(int desiredRank, int desiredFile) {
 		if (canMove(desiredRank, desiredFile)) {
-			_board.getBoard()[_rank][_file] = new NullPiece(_rank, _file, _logic);
+			_board[_rank][_file] = new NullPiece(_rank, _file, _logic);
 			this.setRank(desiredRank);
 			this.setFile(desiredFile);
-			_board.getBoard()[_rank][_file] = this;
+			_board[_rank][_file] = this;
 			_hasMoved = true;
 			return true;
 		} else {

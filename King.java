@@ -2,7 +2,7 @@ import static java.lang.Math.abs;
 
 public class King extends Piece {
 
-	public King(int rank, int file, Player player, Board board, Logic logic) {
+	public King(int rank, int file, Player player, Piece[][] board, Logic logic) {
 		super(rank, file, player, board, logic);
 	}
 
