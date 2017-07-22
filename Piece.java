@@ -9,6 +9,8 @@ public abstract class Piece {
 	protected Board _board;
 	protected Logic _logic;
 
+	protected boolean _hasMoved;
+
 	private ClickListener _clickListener;
 	
 	public Piece(int rank, int file, Player player, Board board, Logic logic) {
@@ -18,6 +20,7 @@ public abstract class Piece {
 		_board = board;
 		_logic = logic;
 		_clickListener = new ClickListener();
+		_hasMoved = false;
 	}
 
 	public String toString() {
@@ -61,6 +64,7 @@ public abstract class Piece {
 			this.setRank(desiredRank);
 			this.setFile(desiredFile);
 			_board.getBoard()[_rank][_file] = this;
+			_hasMoved = true;
 			return true;
 		} else {
 			return false;
