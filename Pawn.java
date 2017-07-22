@@ -1,8 +1,8 @@
 
 public class Pawn extends Piece {
 
-	public Pawn(int rank, int file, Player player, Board board) {
-		super(rank, file, player, board);
+	public Pawn(int rank, int file, Player player, Board board, Logic logic) {
+		super(rank, file, player, board, logic);
 	}
 
 	@Override

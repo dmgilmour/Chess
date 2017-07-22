@@ -1,8 +1,8 @@
 
 public class Queen extends Piece {
 
-	public Queen(int rank, int file, Player player, Board board) {
-		super(rank, file, player, board);
+	public Queen(int rank, int file, Player player, Board board, Logic logic) {
+		super(rank, file, player, board, logic);
 	}
 
 	@Override

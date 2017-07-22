@@ -2,8 +2,8 @@ import static java.lang.Math.abs;
 
 public class Knight extends Piece {
 
-	public Knight(int rank, int file, Player player, Board board) {
-		super(rank, file, player, board);
+	public Knight(int rank, int file, Player player, Board board, Logic logic) {
+		super(rank, file, player, board, logic);
 	}
 
 	@Override

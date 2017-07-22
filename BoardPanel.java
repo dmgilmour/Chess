@@ -7,23 +7,27 @@ public class BoardPanel extends JPanel {
 
 	private Board _board;
 	private JButton[][] _display;
-//	private GameLogic _logic;
+	private Logic _logic;
 	private Player _white;
 	private Player _black;
 
 	public BoardPanel() {
 
-		_board = new Board(this);
 		_white = new Player(0);
-		_white.initializePieces(_board);
 		_black = new Player(1);
-		_black.initializePieces(_board);
+		_logic = new Logic(this, _white, _black);
+		_board = new Board(this, _logic);
+
+		_white.initializePieces(_board, _logic);
+		_black.initializePieces(_board, _logic);
 		_board.setPlayerPieces(_white);
 		_board.setPlayerPieces(_black);
-//		_logic = new 
+
 		_display = new JButton[8][8];
 		initializeDisplay();
 		display(_board);
+		Piece temp = new NullPiece(0, 0, _logic);
+		_logic.registerClick(temp);
 	}
 
 				
@@ -48,9 +52,9 @@ public class BoardPanel extends JPanel {
 	private void display(Board board) {
 		for (Piece[] row : board.getBoard()) {
 			for (Piece p : row) {
-				if (p != null) {
-					_display[p.getRank()][p.getFile()].setText(p.toString());
-				}
+				if (p instanceof NullPiece) System.out.println("Ayyo");
+				_display[p.getRank()][p.getFile()].setText(p.toString());
+				_display[p.getRank()][p.getFile()].addActionListener(p.getListener());
 			}
 		}
 	}

@@ -1,8 +1,8 @@
 
 public class Rook extends Piece {
 
-	public Rook(int rank, int file, Player player, Board board) {
-		super(rank, file, player, board);
+	public Rook(int rank, int file, Player player, Board board, Logic logic) {
+		super(rank, file, player, board, logic);
 	}
 
 	@Override

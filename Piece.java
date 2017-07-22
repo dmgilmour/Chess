@@ -1,16 +1,23 @@
+import java.awt.event.*;
 
 public abstract class Piece {
 	
+	private Piece _this = this;
 	private int _rank;
 	private int _file;
 	protected Player _player;
 	protected Board _board;
+	protected Logic _logic;
+
+	private ClickListener _clickListener;
 	
-	public Piece(int rank, int file, Player player, Board board) {
+	public Piece(int rank, int file, Player player, Board board, Logic logic) {
 		_rank = rank;
 		_file = file;
 		_player = player;
 		_board = board;
+		_logic = logic;
+		_clickListener = new ClickListener();
 	}
 
 	public String toString() {
@@ -49,12 +56,12 @@ public abstract class Piece {
 	}
 
 	public boolean move(int desiredRank, int desiredFile) {
-		if (!canMove(desiredRank, desiredFile)) {
-			return false;
-		} else {
+		if (canMove(desiredRank, desiredFile)) {
 			this.setRank(desiredRank);
 			this.setFile(desiredFile);
 			return true;
+		} else {
+			return false;
 		}
 	}
 
@@ -62,5 +69,17 @@ public abstract class Piece {
 		return (location >= 0 && location < 8);
 	}
 
-		
+	public ActionListener getListener() {
+		return _clickListener;
+	}
+
+	public Piece get() {
+		return _this;
+	}
+
+	class ClickListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			_logic.registerClick(_this);
+		}
+	}
 }
