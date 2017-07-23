@@ -18,26 +18,32 @@ public class Logic {
 		_selectionBeenMade = false;
 	}
 
+	public Player getCurPlayer() {
+		return _curPlayer;
+	}
+
 
 	public void registerClick(Piece p) {
 		if (p.getPlayer() != _curPlayer && !_selectionBeenMade) {
-			System.out.println("Not your piece");
+			// Not player's piece
 		} else if (!_selectionBeenMade) {
-			System.out.println("Piece Selected");
+			// Is players piece, being selected
 			_selectionBeenMade = true;
 			_selectedPiece = p;
-			_boardPanel.highlightPiece(_selectedPiece, _curPlayer);
+			_boardPanel.highlightSquare(_selectedPiece);
 		} else if (p == _selectedPiece) {
-			System.out.println("Undoing select");
-			_boardPanel.unhighlightPiece(_selectedPiece, _curPlayer);
+			// Selected previous piece, unselecting
+			_boardPanel.unhighlightSquare(_selectedPiece);
 			_selectionBeenMade = false;
 			_selectedPiece = null;
 		} else if (_selectionBeenMade && p.getPlayer() == _curPlayer) {
-			_boardPanel.blinkPiece(_selectedPiece, _curPlayer);
-			System.out.println("Blocked by your piece");
+			// Attempting to select one of the player's pieces, blinking
+			_boardPanel.blinkSquare(_selectedPiece);
 		} else if (_selectedPiece.canMove(p.getRank(), p.getFile())) { 
-			System.out.println("Second Click");
+			// Successful piece select
 			try {
+				int rank = _selectedPiece.getRank();
+				int file = _selectedPiece.getFile();
 				_selectedPiece.move(p.getRank(), p.getFile());
 				if (p.getPlayer() != _curPlayer) {
 					p.remove();
@@ -45,16 +51,21 @@ public class Logic {
 				if (inCheck(_curPlayer, _opponent)) {
 					throw new Exception();
 				} else {
+					_boardPanel.update(p);
+					_boardPanel.update(rank, file);
+					_boardPanel.unhighlightSquare(rank, file);
 					_selectionBeenMade = false;
 					nextTurn();
 				}
 					
 			} catch (Exception e) {
 				System.out.println("Puts you in check");
-				_boardPanel.blinkPiece(_curPlayer.getKing(), _curPlayer);
+				System.out.println(">" + _selectedPiece.toString());
+				_boardPanel.blinkSquare(_curPlayer.getKing());
+				_boardPanel.blinkSquare(_selectedPiece);
 			}
 		} else {
-			_boardPanel.blinkPiece(_selectedPiece, _curPlayer);
+			_boardPanel.blinkSquare(_selectedPiece);
 			System.out.println("Invalid movement for this piece");
 		}
 	}
@@ -74,7 +85,6 @@ public class Logic {
 
 	public boolean inCheck(Player player, Player opponent) {
 		Piece king = player.getPieces().get(player.getPieces().size() - 1);
-		System.out.println(king);
 		for (Piece p : opponent.getPieces()) {
 			if (p.canMove(king.getRank(), king.getFile())) {
 				return true;

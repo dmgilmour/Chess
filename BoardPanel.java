@@ -6,12 +6,12 @@ import java.util.*;
 
 public class BoardPanel extends JPanel {
 
-	private static final int TIMER_DELAY = 200;
-	private static final int MAX_TIME = 1250;
-	private static final String READY = "ready";
+	private static final int BLINK_TIME = 200;
+	private static final int BLINK_COUNT = 3;
 
 	private Piece[][] _board;
-	private JButton[][] _display;
+	private JPanel[][] _display;
+	private JButton[][] _squares;
 	private Logic _logic;
 	private Player _white;
 	private Player _black;
@@ -32,125 +32,133 @@ public class BoardPanel extends JPanel {
 		_black.initializePieces(_board, _logic);
 
 
-		_display = new JButton[8][8];
+		_display = new JPanel[8][8];
+		_squares = new JButton[8][8];
 		for (int i = 0; i < 8; i++) {
 			for (int j = 0; j < 8; j++) {
-				_display[i][j] = new JButton();
+				JButton sq = new JButton();
+				sq.setPreferredSize(new Dimension(100, 100));
+				sq.setMaximumSize(new Dimension(150, 150));
+				if ((i + j) % 2 == 0) {
+					sq.setBackground(new Color(0xf0d9b5));
+				} else {
+					sq.setBackground(new Color(0xb58863));
+				}
+				_squares[i][j] = sq;
+				_display[i][j] = new JPanel();
+				this.update(_board[i][j]);
+				this.add(_display[i][j]);
 			}
 		}
 		this.setLayout(new GridLayout(8, 8));
 		display(_white);
-		Piece temp = new NullPiece(0, 0, _logic);
-		_logic.registerClick(temp);
 	}
 
 
 	
 				
 	public void display(Player player) {
-		for (int i = 7; i >= 0; i--) {
-			for (int j = 7; j >= 0; j--) {
-				update(_board[i][j], player);
-				if ((i + j) % 2 == 0) {
-					_display[i][j].setBackground(new Color(0xf0d9b5));
-				} else {
-					_display[i][j].setBackground(new Color(0xb58863));
+		System.out.println("Displaying for " + player);	
+		for (JPanel[] row : _display) {
+			for (JPanel p : row) {
+				if (p.getComponents() != null) {
+					for (Component c : p.getComponents()) {
+						p.remove(c);
+					}
 				}
 			}
 		}
+		Player curPlayer = _logic.getCurPlayer();
+		int orientation;
+		int direction;
+		if (curPlayer.getNum() == 0) {
+			orientation = 7;
+			direction = -1;
+		} else {
+			orientation = 0;
+			direction = 1;
+		}
+		int displayY = 0;
+		for (int squareY = orientation; squareY < 8 && squareY >= 0; squareY += direction) {
+			int displayX = 0;
+			for (int squareX = orientation; squareX < 8 && squareX >= 0; squareX += direction) {
+				_display[displayY][displayX].add(_squares[squareY][squareX]);
+				_display[displayY][displayX].update(_display[displayY][displayX].getGraphics());
+				displayX++;	
+			}
+			displayY++;
+		}
+			
 		this.setVisible(true);
 	}
 
-	public void update(Piece piece, Player curPlayer) {
-		int rank;
-		int file;
-		if (curPlayer.getNum() == 0) {
-			rank = piece.getRank();
-			file = piece.getFile();
-		} else {
-			rank = 7 - piece.getRank();
-			file = 7 - piece.getFile();
-		}
-			
-		JButton sq = _display[rank][file];
-		//sq.setText(piece.toString());
+
+	public void update(Piece piece) {
+		update(piece.getRank(), piece.getFile());
+	}
+
+	public void update(int rank, int file) {
+		Piece piece = _board[rank][file];
+		JButton sq = _squares[rank][file];
 		for (ActionListener al : sq.getActionListeners()) {
 			sq.removeActionListener(al);
 		}
 		
 		sq.addActionListener(piece.getListener());
-		sq.setPreferredSize(new Dimension(100, 100));
-		sq.setMaximumSize(new Dimension(150, 150));
 		ImageIcon image = new ImageIcon(getClass().getResource(("resources/" + piece.toString() + ".png")));
 		image = new ImageIcon(image.getImage().getScaledInstance(110, 110,  java.awt.Image.SCALE_SMOOTH));
 		sq.setIcon(image);
-		this.add(sq);
 	}
 
-	public void blinkPiece(Piece piece, Player curPlayer) {
-		int rank;
-		int file;
-		if (curPlayer.getNum() == 0) {
-			rank = piece.getRank();
-			file = piece.getFile();
-		} else {
-			rank = 7 - piece.getRank();
-			file = 7 - piece.getFile();
-		}
-		JButton sq = _display[rank][file];
+	public void blinkSquare(Piece piece) {
+		blinkSquare(piece.getRank(), piece.getFile());
+	}
+
+	public void blinkSquare(int rank, int file) {
+
+		JButton sq = _squares[rank][file];
 		Color prevColor = sq.getBackground();
-		Timer blinkTimer = new Timer(TIMER_DELAY, new ActionListener() {
+
+		Timer blinkTimer = new Timer(BLINK_TIME, new ActionListener() {
 			private int count = 0;
-			private boolean on = false;
+			private boolean active = false;
 
 			public void actionPerformed(ActionEvent e) {
-				if (count * TIMER_DELAY >= MAX_TIME) {
+				if (count >= BLINK_COUNT) {
 					sq.setBackground(prevColor);
 					((Timer) e.getSource()).stop();
 				} else {
-					if (on) {
+					if (!active) {
 						sq.setBackground(Color.RED);
+						count++;
 					} else {
 						sq.setBackground(prevColor);
 					}
-					on = !on;
-					count++;
+					active = !active;
 				}
 			}
 		});
+
 		blinkTimer.start();
 	}
 
-	public void highlightPiece(Piece piece, Player curPlayer) {
-		int rank;
-		int file;
-		if (curPlayer.getNum() == 0) {
-			rank = piece.getRank();
-			file = piece.getFile();
-		} else {
-			rank = 7 - piece.getRank();
-			file = 7 - piece.getFile();
-		}
-		_display[rank][file].setBackground(Color.YELLOW);
+	public void highlightSquare(Piece piece) {
+		highlightSquare(piece.getRank(), piece.getFile());
 	}
 
-	public void unhighlightPiece(Piece piece, Player curPlayer) {
-		int rank;
-		int file;
-		if (curPlayer.getNum() == 0) {
-			rank = piece.getRank();
-			file = piece.getFile();
-		} else {
-			rank = 7 - piece.getRank();
-			file = 7 - piece.getFile();
-		}
+	public void highlightSquare(int rank, int file) {
+		_squares[rank][file].setBackground(Color.YELLOW);
+	}
+
+	public void unhighlightSquare(Piece piece) {
+		unhighlightSquare(piece.getRank(), piece.getFile());
+	}
+
+	public void unhighlightSquare(int rank, int file) {
 		if ((rank + file) % 2 == 0) {
-			_display[rank][file].setBackground(new Color(0xf0d9b5));
+			_squares[rank][file].setBackground(new Color(0xf0d9b5));
 		} else {
-			_display[rank][file].setBackground(new Color(0xb58863));
+			_squares[rank][file].setBackground(new Color(0xb58863));
 		}
 	}
-
-		
-		
 }
