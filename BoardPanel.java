@@ -31,9 +31,22 @@ public class BoardPanel extends JPanel {
 		_white.initializePieces(_board, _logic);
 		_black.initializePieces(_board, _logic);
 
+		this.setLayout(new GridLayout(8, 8));
 
-		_display = new JPanel[8][8];
-		_squares = new JButton[8][8];
+		_squares = makeSquares();
+		_display = makeDisplay(_squares);
+
+		for (Piece[] row : _board) {
+			for (Piece p : row) {
+				this.update(p);
+			}
+		}
+
+		display(_white);
+	}
+
+	private JButton[][] makeSquares() {
+		JButton[][] squares = new JButton[8][8];
 		for (int i = 0; i < 8; i++) {
 			for (int j = 0; j < 8; j++) {
 				JButton sq = new JButton();
@@ -44,15 +57,24 @@ public class BoardPanel extends JPanel {
 				} else {
 					sq.setBackground(new Color(0xb58863));
 				}
-				_squares[i][j] = sq;
-				_display[i][j] = new JPanel();
-				this.update(_board[i][j]);
-				this.add(_display[i][j]);
+				squares[i][j] = sq;
 			}
 		}
-		this.setLayout(new GridLayout(8, 8));
-		display(_white);
+		return squares;
 	}
+
+	private JPanel[][] makeDisplay(JButton[][] squares) {
+		JPanel[][] display = new JPanel[8][8];
+		for (int i = 0; i < 8; i++) {
+			for (int j = 0; j < 8; j++) {
+				display[i][j] = new JPanel();
+				display[i][j].add(squares[i][j]);
+				this.add(display[i][j]);
+			}
+		}
+		return display;
+	}
+				
 
 
 	
