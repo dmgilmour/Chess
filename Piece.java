@@ -64,7 +64,7 @@ public abstract class Piece {
 	}
 
 	public boolean move(int desiredRank, int desiredFile) {
-		if (canMove(desiredRank, desiredFile)) {
+		if (this.canMove(desiredRank, desiredFile)) {	
 			_board[_rank][_file] = new NullPiece(_rank, _file, _logic);
 			this.setRank(desiredRank);
 			this.setFile(desiredFile);
@@ -74,6 +74,10 @@ public abstract class Piece {
 		} else {
 			return false;
 		}
+	}
+
+	public void restore() {
+		_board[_rank][_file] = this;
 	}
 
 	public void remove() {

@@ -8,7 +8,7 @@ public class MainWindow extends JFrame {
 	private final int HEIGHT = 1000;
 	private final int WIDTH = 1000;
 
-	private BoardPanel _boardPanel;
+	private MainPanel _mainPanel;
 //	private TopPanel _topPanel;
 
 	public MainWindow() {
@@ -20,14 +20,14 @@ public class MainWindow extends JFrame {
 
 		this.setLayout(new FlowLayout());
 
-		_boardPanel = new BoardPanel();
-		_boardPanel.setMaximumSize(new Dimension(800, 800));
+		_mainPanel = new MainPanel();
+		_mainPanel.setMaximumSize(new Dimension(800, 800));
 
 
 
 //		_topPanel = new TopPanel(_boardPanel);
 		
-		this.add(_boardPanel);
+		this.add(_mainPanel);
 //		this.add(_topPanel, BorderLayout.NORTH);
 		this.setVisible(true);
 	}
