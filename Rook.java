@@ -19,15 +19,15 @@ public class Rook extends Piece {
 			int rankDir = Integer.signum(desiredRank - _rank);
 			int fileDir = Integer.signum(desiredFile - _file);
 
-			int r = _rank + rankDir;
-			int f = _file + fileDir;
+			int rankLoc = _rank + rankDir;
+			int fileLoc = _file + fileDir;
 
-			while (r != desiredRank || f != desiredFile) {
-				if (_board[r][f].getPlayer() != null) {
+			while (rankLoc != desiredRank || fileLoc != desiredFile) {
+				if (_board[rankLoc][fileLoc].getPlayer() != null) {
 					return false;
 				}
-				r += rankDir;
-				f += fileDir;
+				rankLoc += rankDir;
+				fileLoc += fileDir;
 			}
 			return true;
 		} else {
@@ -71,6 +71,31 @@ public class Rook extends Piece {
 				rLoc += rDir;
 				fLoc += fDir;
 			}
+		}
+
+		return toReturn;
+	}
+
+	@Override
+	public ArrayList<Piece> getMovesToBlock(int rank, int file) {
+
+		ArrayList<Piece> toReturn = new ArrayList<Piece>();
+		toReturn.add(this);
+
+		if (!canMove(rank, file)) {
+			return null;
+		}
+
+		int rankDir = Integer.signum(rank - _rank);
+		int fileDir = Integer.signum(file - _file);
+
+		int rankLoc = _rank + rankDir;
+		int fileLoc = _file + fileDir;
+
+		while (rankLoc != rank && fileLoc != file) {
+			toReturn.add(_board[rankLoc][fileLoc]);
+			rankLoc += rankDir;
+			fileLoc += fileDir;
 		}
 
 		return toReturn;

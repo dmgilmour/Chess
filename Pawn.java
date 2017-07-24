@@ -60,4 +60,19 @@ public class Pawn extends Piece {
 
 		return toReturn;
 	}
+
+	@Override
+	public ArrayList<Piece> getMovesToBlock(int rank, int file) {
+
+		ArrayList<Piece> toReturn = new ArrayList<Piece>();
+		toReturn.add(this);
+
+		if (!canMove(rank, file)) {
+			return null;
+		}
+
+		return toReturn;
+
+	}
+		
 }

@@ -82,6 +82,12 @@ public abstract class Piece {
 		return null;	
 	}
 
+	public ArrayList<Piece> getMovesToBlock(int rank, int file) {
+		ArrayList<Piece> toReturn = new ArrayList<Piece>();
+		toReturn.add(this);
+		return toReturn;
+	}
+
 	public void remove() {
 		_player.getPieces().remove(this);
 	}

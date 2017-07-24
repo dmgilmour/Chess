@@ -101,6 +101,7 @@ public class Logic {
 	private void nextTurn() {
 
 		// Check for mate
+		System.out.println("Checkmate for opponent: " + isCheckmate(_opponent));
 		Player tempPlayer = _curPlayer;
 		_curPlayer = _opponent;
 		_opponent = tempPlayer;
@@ -167,17 +168,19 @@ public class Logic {
 			Piece king = player.getKing();
 			for (Piece sq : king.getAvailableMoves()) {
 				if (!willCauseCheck(king, sq)) {
+					System.out.println("King can move");
 					return false;
 				}
 			}
+			System.out.println("King cannot move");
 
 			if (attackingPieces.size() > 1) {
 
 				// You're dead
+				System.out.println("More than one piece");
+				return true;
 
 			} else {
-
-				Piece attacker = attackingPieces.get(0);
 
 				// Get spaces that could prevent attack
 				// for pieces see if they can move to any space
@@ -185,9 +188,24 @@ public class Logic {
 				// if it does not cause check, not mate
 				// if it does cause check, try again
 
+				Piece attacker = attackingPieces.get(0);
+				for (Piece blockingSquare : attacker.getMovesToBlock(king.getRank(), king.getFile())) {
+					System.out.println(blockingSquare.getRank() + " : " + blockingSquare.getFile());
+					System.out.println(blockingSquare);
+					for (Piece defender : player.getPieces()) {
+						System.out.println(defender);
+						System.out.println(defender.canMove(blockingSquare.getRank(), blockingSquare.getFile()));
+						if (defender.canMove(blockingSquare.getRank(), blockingSquare.getFile())) {
+							if (!willCauseCheck(defender, blockingSquare)) {
+								return false;
+							}
+						}
+					}
+				}
 			}
+
 		}
-		return false;
+		return true;
 	}
 
 	private ArrayList<Piece> getPiecesChecking(Player player) {

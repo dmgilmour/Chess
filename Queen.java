@@ -41,27 +41,52 @@ public class Queen extends Piece {
 
 		ArrayList<Piece> toReturn = new ArrayList<Piece>();
 
-		int rDir = 0;
-		int fDir = 0;
+		int rankDir = 0;
+		int fileDir = 0;
 		for (int i = 0; i < 9; i++) {
-			rDir = i % 3 - 1;
-			fDir = i / 3 - 1;
-			if (rDir == 0 && fDir == 0) continue;
-			int rLoc = _rank + rDir;
-			int fLoc = _file + fDir;
+			rankDir = i % 3 - 1;
+			fileDir = i / 3 - 1;
+			if (rankDir == 0 && fileDir == 0) continue;
+			int rankLoc = _rank + rankDir;
+			int fileLoc = _file + fileDir;
 			boolean hitPiece = false;
-			while (boundsCheck(rLoc, fLoc) && !hitPiece) {
-				if (_board[rLoc][fLoc].getPlayer() == null) {
-					toReturn.add(_board[rLoc][fLoc]);
-				} else if (_board[rLoc][fLoc].getPlayer() == _player) {
+			while (boundsCheck(rankLoc, fileLoc) && !hitPiece) {
+				if (_board[rankLoc][fileLoc].getPlayer() == null) {
+					toReturn.add(_board[rankLoc][fileLoc]);
+				} else if (_board[rankLoc][fileLoc].getPlayer() == _player) {
 					hitPiece = true;
 				} else {
-					toReturn.add(_board[rLoc][fLoc]);
+					toReturn.add(_board[rankLoc][fileLoc]);
 					hitPiece = true;
 				}
-				rLoc += rDir;
-				fLoc += fDir;
+				rankLoc += rankDir;
+				fileLoc += fileDir;
 			}
+		}
+
+		return toReturn;
+	}
+
+	@Override
+	public ArrayList<Piece> getMovesToBlock(int rank, int file) {
+
+		ArrayList<Piece> toReturn = new ArrayList<Piece>();
+		toReturn.add(this);
+
+		if (!canMove(rank, file)) {
+			return null;
+		}
+
+		int rankDir = Integer.signum(rank - _rank);
+		int fileDir = Integer.signum(file - _file);
+
+		int rankLoc = _rank + rankDir;
+		int fileLoc = _file + fileDir;
+
+		while (rankLoc != rank && fileLoc != file) {
+			toReturn.add(_board[rankLoc][fileLoc]);
+			rankLoc += rankDir;
+			fileLoc += fileDir;
 		}
 
 		return toReturn;
