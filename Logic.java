@@ -82,6 +82,10 @@ public class Logic {
 
 				// Causes check, displaying error
 
+				for (Piece c : getPiecesChecking(_curPlayer)) {
+					_boardPanel.blinkSquare(c);
+				}
+
 				_boardPanel.blinkSquare(_curPlayer.getKing());
 			}
 
@@ -105,13 +109,15 @@ public class Logic {
 	}
 
 	private boolean inCheck(Player player) {
+		return inCheck(player, player.getKing().getRank(), player.getKing().getFile());
+	}
+
+	private boolean inCheck(Player player, int rank, int file) {
 
 		Player opponent = (player == _curPlayer ? _opponent : _curPlayer);
 
-		Piece king = player.getKing();
-
 		for (Piece p : opponent.getPieces()) {
-			if (p.canMove(king.getRank(), king.getFile())) {
+			if (p.canMove(rank, file)) {
 
 				// Checks that the piece has not been captured this turn
 
@@ -125,6 +131,7 @@ public class Logic {
 
 	private boolean willCauseCheck(Piece toMove, Piece toTake) {
 
+
 		int prevRank = toMove.getRank();
 		int prevFile = toMove.getFile();
 
@@ -134,7 +141,13 @@ public class Logic {
 		_board[prevRank][prevFile] = new NullPiece(prevRank, prevFile, this);
 		_board[nextRank][nextFile] = toMove;
 
-		boolean toReturn = inCheck(toMove.getPlayer());
+		boolean toReturn;
+
+		if (toMove == toMove.getPlayer().getKing()) {
+			toReturn = inCheck(toMove.getPlayer(), nextRank, nextFile);	
+		} else {
+			toReturn = inCheck(toMove.getPlayer());
+		}
 
 		_board[prevRank][prevFile] = toMove;
 		_board[nextRank][nextFile] = toTake;
