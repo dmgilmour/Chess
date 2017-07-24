@@ -1,6 +1,8 @@
 import java.awt.event.*;
 import javax.swing.*;
 
+import java.util.ArrayList;
+
 public abstract class Piece {
 	
 	private Piece _this = this;
@@ -53,7 +55,7 @@ public abstract class Piece {
 	}
 
 	public boolean canMove(int desiredRank, int desiredFile) {
-		if (!boundsCheck(desiredRank) || !boundsCheck(desiredFile)) {
+		if (!boundsCheck(desiredRank, desiredFile)) {
 			return false;
 		}
 		if (_board[desiredRank][desiredFile].getPlayer() == _player) {
@@ -76,16 +78,16 @@ public abstract class Piece {
 		}
 	}
 
-	public void restore() {
-		_board[_rank][_file] = this;
+	public ArrayList<Piece> getAvailableMoves() {
+		return null;	
 	}
 
 	public void remove() {
 		_player.getPieces().remove(this);
 	}
 
-	public boolean boundsCheck(int location) {
-		return (location >= 0 && location < 8);
+	public boolean boundsCheck(int rank, int file) {
+		return (rank >= 0 && rank < 8 && file >= 0 && file < 8);
 	}
 
 	public ActionListener getListener() {

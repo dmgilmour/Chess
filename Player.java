@@ -13,9 +13,15 @@ public class Player {
 	}
 
 	public void initializePieces(Piece[][] board, Logic logic) {
+
+		// King added first so fetching king is easily done through get(0)
+
+		_pieces.add(new King(((_num == 0) ? 0 : 7), 3, this, board, logic));
+
 		for (int i = 0; i < 8; i++) {
 			_pieces.add(new Pawn(((_num == 0) ? 1 : 6), i, this, board, logic));	
 		}
+
 		_pieces.add(new Rook(((_num == 0) ? 0 : 7), 0, this, board, logic));
 		_pieces.add(new Rook(((_num == 0) ? 0 : 7), 7, this, board, logic));
 		_pieces.add(new Knight(((_num == 0) ? 0 : 7), 1, this, board, logic));
@@ -23,7 +29,7 @@ public class Player {
 		_pieces.add(new Bishop(((_num == 0) ? 0 : 7), 2, this, board, logic));
 		_pieces.add(new Bishop(((_num == 0) ? 0 : 7), 5, this, board, logic));
 		_pieces.add(new Queen(((_num == 0) ? 0 : 7), 4, this, board, logic));
-		_pieces.add(new King(((_num == 0) ? 0 : 7), 3, this, board, logic));
+
 		placePieces(board);
 	}
 
@@ -40,14 +46,13 @@ public class Player {
 	}
 
 	public Piece getKing() {
-		return _pieces.get(_pieces.size() - 1);
+		return _pieces.get(0);
 	}
 
 	public void placePieces(Piece[][] board) {
 		for (Piece p : _pieces) {
 			board[p.getRank()][p.getFile()] = p;
 		}
-			
 	}
 }
 		

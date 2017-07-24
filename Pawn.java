@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 
 public class Pawn extends Piece {
 
@@ -33,5 +34,30 @@ public class Pawn extends Piece {
 			}	
 		}
 		return false;
+	}
+
+	@Override
+	public ArrayList<Piece> getAvailableMoves() {
+
+		ArrayList<Piece> toReturn = new ArrayList<Piece>();
+
+		int direction = (_player.getNum() == 0 ? 1 : -1);
+
+		if (canMove(_rank + direction, _file)) {
+			toReturn.add(_board[_rank + direction][_file]);
+			if (canMove(_rank + 2*direction, _file)) {
+				toReturn.add(_board[_rank + 2*direction][_file]); 
+			}
+		}
+
+		if (canMove(_rank + direction, _file + 1)) {
+			toReturn.add(_board[_rank + direction][_file + 1]); 
+		}
+
+		if (canMove(_rank + direction, _file - 1)) {
+			toReturn.add(_board[_rank + direction][_file - 1]); 
+		}
+
+		return toReturn;
 	}
 }

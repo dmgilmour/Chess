@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 
 public class Rook extends Piece {
 
@@ -32,5 +33,46 @@ public class Rook extends Piece {
 		} else {
 			return false;
 		}
+	}
+
+	@Override
+	public ArrayList<Piece> getAvailableMoves() {
+
+		ArrayList<Piece> toReturn = new ArrayList<Piece>();
+
+		int rDir = 0;
+		int fDir = 0;
+		for (int i = 0; i < 4; i++) {
+			if (i == 0) {
+				rDir = 1;
+				fDir = 0;
+			} else if (i == 2) {
+				rDir = -1;
+				fDir = 0;
+			} else if (i == 3) {
+				rDir = 0;
+				fDir = 1;
+			} else {
+				rDir = 0;
+				fDir = -1;
+			}
+			int rLoc = _rank + rDir;
+			int fLoc = _file + fDir;
+			boolean hitPiece = false;
+			while (boundsCheck(rLoc, fLoc) && !hitPiece) {
+				if (_board[rLoc][fLoc].getPlayer() == null) {
+					toReturn.add(_board[rLoc][fLoc]);
+				} else if (_board[rLoc][fLoc].getPlayer() == _player) {
+					hitPiece = true;
+				} else {
+					toReturn.add(_board[rLoc][fLoc]);
+					hitPiece = true;
+				}
+				rLoc += rDir;
+				fLoc += fDir;
+			}
+		}
+
+		return toReturn;
 	}
 }

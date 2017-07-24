@@ -1,4 +1,5 @@
 import static java.lang.Math.abs;
+import java.util.ArrayList;
 
 public class Queen extends Piece {
 
@@ -33,5 +34,36 @@ public class Queen extends Piece {
 		} else {
 			return false;
 		}
+	}
+
+	@Override
+	public ArrayList<Piece> getAvailableMoves() {
+
+		ArrayList<Piece> toReturn = new ArrayList<Piece>();
+
+		int rDir = 0;
+		int fDir = 0;
+		for (int i = 0; i < 9; i++) {
+			rDir = i % 3 - 1;
+			fDir = i / 3 - 1;
+			if (rDir == 0 && fDir == 0) continue;
+			int rLoc = _rank + rDir;
+			int fLoc = _file + fDir;
+			boolean hitPiece = false;
+			while (boundsCheck(rLoc, fLoc) && !hitPiece) {
+				if (_board[rLoc][fLoc].getPlayer() == null) {
+					toReturn.add(_board[rLoc][fLoc]);
+				} else if (_board[rLoc][fLoc].getPlayer() == _player) {
+					hitPiece = true;
+				} else {
+					toReturn.add(_board[rLoc][fLoc]);
+					hitPiece = true;
+				}
+				rLoc += rDir;
+				fLoc += fDir;
+			}
+		}
+
+		return toReturn;
 	}
 }
