@@ -100,6 +100,10 @@ public abstract class Piece {
 		return _clickListener;
 	}
 
+	public boolean getHasMoved() {
+		return _hasMoved;
+	}
+
 	class ClickListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			_logic.registerClick(_this);

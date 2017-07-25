@@ -98,6 +98,10 @@ public class Logic {
 		}
 	}
 
+	public void updateSquare(int rank, int file) {
+		_boardPanel.update(rank, file);
+	}
+
 	private void nextTurn() {
 
 		// Check for mate
@@ -109,11 +113,11 @@ public class Logic {
 
 	}
 
-	private boolean inCheck(Player player) {
+	public boolean inCheck(Player player) {
 		return inCheck(player, player.getKing().getRank(), player.getKing().getFile());
 	}
 
-	private boolean inCheck(Player player, int rank, int file) {
+	public boolean inCheck(Player player, int rank, int file) {
 
 		Player opponent = (player == _curPlayer ? _opponent : _curPlayer);
 
@@ -130,7 +134,7 @@ public class Logic {
 		return false;
 	}
 
-	private boolean willCauseCheck(Piece toMove, Piece toTake) {
+	public boolean willCauseCheck(Piece toMove, Piece toTake) {
 
 
 		int prevRank = toMove.getRank();
