@@ -16,18 +16,24 @@ public class King extends Piece {
 	public boolean canMove(int desiredRank, int desiredFile) {
 		if (!super.canMove(desiredRank, desiredFile)) {
 			return false;
-		} else if (!_hasMoved && desiredRank == _rank) {
-			return canCastle(desiredRank, desiredFile);
 		}
 
-		return (Math.abs(desiredRank - _rank) <= 1 && Math.abs(desiredFile - _file) <= 1);
+		
+		
+		boolean toReturn = (Math.abs(desiredRank - _rank) <= 1 && Math.abs(desiredFile - _file) <= 1);
+		if (!_hasMoved && desiredRank == _rank && !toReturn) {
+			return canCastle(desiredRank, desiredFile);
+		} else {
+			return toReturn;
+		}
+
 			
 	}
 
 	@Override
 	public boolean move(int desiredRank, int desiredFile) {
 		int rankDistance = desiredRank - _rank;
-		int fileDistance = desiredRank - _file;
+		int fileDistance = desiredFile - _file;
 		if (rankDistance < 2 && rankDistance > -2 && fileDistance < 2 && fileDistance > -2) {
 			return super.move(desiredRank, desiredFile);
 		} else {
@@ -58,8 +64,6 @@ public class King extends Piece {
 	}
 
 	private boolean canCastle(int desiredRank, int desiredFile) {
-
-		// Might want to castle
 
 		// Get direction of castle desired
 		int direction = Integer.signum(desiredFile - _file);

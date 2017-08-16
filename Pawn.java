@@ -6,6 +6,18 @@ public class Pawn extends Piece {
 		super(rank, file, player, board, logic);
 	}
 
+	private void promote() {
+		
+		//prompt the user
+
+		ArrayList<Piece> pieces = this.getPlayer().getPieces();
+		pieces.add(new Queen(_rank, _file, _player, _board, _logic));
+		this.remove();
+		_board[_rank][_file] = pieces.get(pieces.size() - 1);
+	}
+		
+		
+
 	@Override
 	public String toString() {
 		return _player.toString() + "-Pawn";
@@ -35,6 +47,21 @@ public class Pawn extends Piece {
 		}
 		return false;
 	}
+
+	@Override
+	public boolean move(int desiredRank, int desiredFile) {
+		boolean success = super.move(desiredRank, desiredFile);
+
+		if (success) {
+			if (_rank == 0 || _rank == 7) {
+				System.out.println("PROMOTE");
+				this.promote();
+			}
+		}
+		return success;
+	}
+		
+		
 
 	@Override
 	public ArrayList<Piece> getAvailableMoves() {

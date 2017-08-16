@@ -35,27 +35,18 @@ public class Logic {
 
 		} else if (!_selectionBeenMade) {
 
-			// First select and is players piece, being selected
-
-			_selectionBeenMade = true;
-			_pieceToMove = p;
-			_boardPanel.highlightSquare(_pieceToMove);
+			makeSelection(p);
 
 		} else if (p == _pieceToMove) {
 
-			// Second select and selected piece to move, unselecting 
-
-			_boardPanel.unhighlightSquare(_pieceToMove);
-			_selectionBeenMade = false;
-			_pieceToMove = null;
+			clearSelection();
 
 		} else if (_selectionBeenMade && p.getPlayer() == _curPlayer) {
 
 			// Second select and selected another piece they own, changing selected piece 
 
-			_boardPanel.unhighlightSquare(_pieceToMove.getRank(), _pieceToMove.getFile());
-			_pieceToMove = p;
-			_boardPanel.highlightSquare(_pieceToMove.getRank(), _pieceToMove.getFile());
+			clearSelection();
+			makeSelection(p);
 
 		} else if (_pieceToMove.canMove(p.getRank(), p.getFile())) { 
 
@@ -68,10 +59,12 @@ public class Logic {
 
 				// Does not cause check, moving piece
 
-				_pieceToMove.move(p.getRank(), p.getFile());
+				int nextRank = p.getRank();
+				int nextFile = p.getFile();
+				_pieceToMove.move(nextRank, nextFile);
 				p.remove();
 
-				_boardPanel.update(_pieceToMove);
+				_boardPanel.update(nextRank, nextFile);
 				_boardPanel.update(prevRank, prevFile);
 				_boardPanel.unhighlightSquare(prevRank, prevFile);
 
@@ -119,6 +112,8 @@ public class Logic {
 
 	public boolean inCheck(Player player, int rank, int file) {
 
+		// inCheck can be called on any player so we check the opponent
+		// relative to 
 		Player opponent = (player == _curPlayer ? _opponent : _curPlayer);
 
 		for (Piece p : opponent.getPieces()) {
@@ -136,7 +131,6 @@ public class Logic {
 
 	public boolean willCauseCheck(Piece toMove, Piece toTake) {
 
-
 		int prevRank = toMove.getRank();
 		int prevFile = toMove.getFile();
 
@@ -151,6 +145,7 @@ public class Logic {
 		if (toMove == toMove.getPlayer().getKing()) {
 			toReturn = inCheck(toMove.getPlayer(), nextRank, nextFile);	
 		} else {
+			
 			toReturn = inCheck(toMove.getPlayer());
 		}
 
@@ -168,29 +163,21 @@ public class Logic {
 
 			ArrayList<Piece> attackingPieces = getPiecesChecking(player);
 
-			// Try moving the king
 			Piece king = player.getKing();
+
+			// Try moving the king
 			for (Piece sq : king.getAvailableMoves()) {
 				if (!willCauseCheck(king, sq)) {
 					System.out.println("King can move");
 					return false;
 				}
 			}
-			System.out.println("King cannot move");
 
 			if (attackingPieces.size() > 1) {
 
-				// You're dead
-				System.out.println("More than one piece");
 				return true;
 
 			} else {
-
-				// Get spaces that could prevent attack
-				// for pieces see if they can move to any space
-				// for each space, see if it would cause check
-				// if it does not cause check, not mate
-				// if it does cause check, try again
 
 				Piece attacker = attackingPieces.get(0);
 				for (Piece blockingSquare : attacker.getMovesToBlock(king.getRank(), king.getFile())) {
@@ -231,6 +218,18 @@ public class Logic {
 			}
 		}
 		return toReturn;
+	}
+
+	private void makeSelection(Piece selected) {
+		_selectionBeenMade = true;
+		_pieceToMove = selected;
+		_boardPanel.highlightSquare(_pieceToMove);
+	}
+
+	private void clearSelection() {
+		_boardPanel.unhighlightSquare(_pieceToMove);
+		_selectionBeenMade = false;
+		_pieceToMove = null;
 	}
 
 
