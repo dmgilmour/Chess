@@ -94,21 +94,27 @@ public class BoardPanel extends JPanel {
 		}
 
 		// Get which orientation we need to display the board in
-		int orientation;
-		int direction;
+		int orientationX;
+		int orientationY;
+		int directionX;
+		int directionY;
 		if (player.getNum() == 0) {
-			orientation = 7;
-			direction = -1;
+			orientationX = 0;
+			orientationY = 7;
+			directionX = 1;
+			directionY = -1;
 		} else {
-			orientation = 0;
-			direction = 1;
+			orientationX = 7;
+			orientationY = 0;
+			directionX = -1;
+			directionY = 1;
 		}
 
 		// Assign the squares to the display in the given players orientation 
 		int displayY = 0;
-		for (int squareY = orientation; squareY < 8 && squareY >= 0; squareY += direction) {
+		for (int squareY = orientationY; squareY < 8 && squareY >= 0; squareY += directionY) {
 			int displayX = 0;
-			for (int squareX = orientation; squareX < 8 && squareX >= 0; squareX += direction) {
+			for (int squareX = orientationX; squareX < 8 && squareX >= 0; squareX += directionX) {
 				_display[displayY][displayX].add(_squares[squareY][squareX]);
 				_display[displayY][displayX].update(_display[displayY][displayX].getGraphics());
 				displayX++;	

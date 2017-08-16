@@ -59,6 +59,8 @@ public class Logic {
 
 				// Does not cause check, moving piece
 
+				String notation = createNotation(_pieceToMove, p);
+
 				int nextRank = p.getRank();
 				int nextFile = p.getFile();
 				_pieceToMove.move(nextRank, nextFile);
@@ -89,6 +91,79 @@ public class Logic {
 			_boardPanel.blinkSquare(_pieceToMove);
 
 		}
+	}
+
+	public String createNotation(Piece start, Piece finish) {
+
+		ArrayList<Piece> pieces = start.getPlayer().getPieces();
+	
+		String toReturn = "";
+
+		if (start instanceof Pawn) {
+			if (!(finish instanceof NullPiece)) {
+				toReturn += (char) (start.getFile() + 97);
+			}
+		} else if (start instanceof Knight) {
+			toReturn = "N";
+		} else if (start instanceof Bishop) {
+			toReturn = "B";
+		} else if (start instanceof Rook) {
+			toReturn = "R";
+		} else if (start instanceof Queen) {
+			toReturn = "Q";
+		} else if (start instanceof King) {
+			toReturn = "K";
+		} else {
+			return null;
+		}
+
+		boolean ambiguous = false;
+		boolean sharedFile = false;
+		boolean sharedRank = false;
+
+		if (!(start instanceof Pawn)) {
+			for (Piece p : pieces) {
+				if (p.getClass().equals(start.getClass()) && p != start) {
+					if (p.canMove(finish.getRank(), finish.getFile())) {
+						ambiguous = true;
+						if (p.getRank() == start.getRank()) {
+							sharedRank = true;
+						}
+						if (p.getFile() == start.getFile()) {
+							sharedFile = true;
+						}
+					}
+				}
+			}
+		}
+
+		if (ambiguous) {
+			if (!sharedFile) {
+				toReturn += (char) (start.getFile() + 97);
+			} else if (!sharedRank) {
+				toReturn += (start.getRank() + 1);
+			} else {
+				toReturn += (char) (start.getFile() + 97);
+				toReturn += (start.getRank() + 1);
+			}
+		}
+				
+		if (!(finish instanceof NullPiece)) {
+			toReturn += "x";
+		}
+		toReturn += (char) (finish.getFile() + 97);
+		toReturn += (finish.getRank() + 1);
+
+		
+
+		if (isCheckmate(_opponent)) {
+			toReturn += "#";
+		} else if (inCheck(_opponent)) {
+			toReturn += "+";
+		}
+
+		System.out.println(toReturn);
+		return toReturn;
 	}
 
 	public void updateSquare(int rank, int file) {

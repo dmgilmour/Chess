@@ -16,7 +16,7 @@ public class Player {
 
 		// King added first so fetching king is easily done through get(0)
 
-		_pieces.add(new King(((_num == 0) ? 0 : 7), 3, this, board, logic));
+		_pieces.add(new King(((_num == 0) ? 0 : 7), 4, this, board, logic));
 
 		for (int i = 0; i < 8; i++) {
 			_pieces.add(new Pawn(((_num == 0) ? 1 : 6), i, this, board, logic));	
@@ -28,7 +28,7 @@ public class Player {
 		_pieces.add(new Knight(((_num == 0) ? 0 : 7), 6, this, board, logic));
 		_pieces.add(new Bishop(((_num == 0) ? 0 : 7), 2, this, board, logic));
 		_pieces.add(new Bishop(((_num == 0) ? 0 : 7), 5, this, board, logic));
-		_pieces.add(new Queen(((_num == 0) ? 0 : 7), 4, this, board, logic));
+		_pieces.add(new Queen(((_num == 0) ? 0 : 7), 3, this, board, logic));
 
 		placePieces(board);
 	}
