@@ -64,11 +64,15 @@ public class Logic {
 
 				int nextRank = p.getRank();
 				int nextFile = p.getFile();
+
 				_pieceToMove.move(nextRank, nextFile);
 
 				_boardPanel.update(nextRank, nextFile);
 				_boardPanel.update(prevRank, prevFile);
 				_boardPanel.unhighlightSquare(prevRank, prevFile);
+
+				notation = modifyNotation(_pieceToMove, _board[nextRank][nextFile], notation);
+				System.out.println(notation);
 
 				_pieceToMove = null;
 				_selectionBeenMade = false;
@@ -93,7 +97,7 @@ public class Logic {
 		}
 	}
 
-	public String createNotation(Piece start, Piece finish) {
+	private String createNotation(Piece start, Piece finish) {
 
 		ArrayList<Piece> pieces = start.getPlayer().getPieces();
 	
@@ -163,6 +167,27 @@ public class Logic {
 		}
 
 		return toReturn;
+	}
+
+	private String modifyNotation(Piece before, Piece after, String notation) {
+		if (before instanceof Pawn && before != after) {
+			notation += "=";
+			if (after instanceof Knight) {
+				notation += "N";
+			} else if (after instanceof Bishop) {
+				notation += "B";
+			} else if (after instanceof Rook) {
+				notation += "R";
+			} else if (after instanceof Queen) {
+				notation += "Q";
+			}
+		}
+		if (isCheckmate(_opponent)) {
+			notation += "#";
+		} else if (inCheck(_opponent)) {
+			notation += "+";
+		}
+		return notation;
 	}
 
 	public void updateSquare(int rank, int file) {
@@ -238,6 +263,7 @@ public class Logic {
 		} else {
 
 			ArrayList<Piece> attackingPieces = getPiecesChecking(player);
+			System.out.println("Number attackers: " + attackingPieces.size());
 
 			Piece king = player.getKing();
 
@@ -247,6 +273,8 @@ public class Logic {
 					System.out.println("King can move");
 					return false;
 				}
+
+				System.out.println("King cannot move");
 			}
 
 			if (attackingPieces.size() > 1) {

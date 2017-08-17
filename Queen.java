@@ -83,7 +83,8 @@ public class Queen extends Piece {
 		int rankLoc = _rank + rankDir;
 		int fileLoc = _file + fileDir;
 
-		while (rankLoc != rank && fileLoc != file) {
+		while (rankLoc != rank || fileLoc != file) {
+		
 			toReturn.add(_board[rankLoc][fileLoc]);
 			rankLoc += rankDir;
 			fileLoc += fileDir;
