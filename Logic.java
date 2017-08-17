@@ -72,7 +72,7 @@ public class Logic {
 				_boardPanel.unhighlightSquare(prevRank, prevFile);
 
 				notation = modifyNotation(_pieceToMove, _board[nextRank][nextFile], notation);
-				System.out.println(notation);
+				_boardPanel.printMove(notation);
 
 				_pieceToMove = null;
 				_selectionBeenMade = false;

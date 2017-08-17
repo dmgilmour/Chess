@@ -12,13 +12,17 @@ public class BoardPanel extends JPanel {
 	private static final Color LIGHT_SQUARE_COLOR = new Color(0xf0d9b5);
 	private static final Color DARK_SQUARE_COLOR = new Color(0xb58863);
 
+	private MainPanel _mainPanel;
+
 	private Piece[][] _board;
 	private JPanel[][] _display;
 	private JButton[][] _squares;
 	private Logic _logic;
 	private boolean _inTrueOrientation = true;
 
-	public BoardPanel() {
+	public BoardPanel(MainPanel mainPanel) {
+
+		_mainPanel = mainPanel;
 
 		Player white = new Player("White", 0);
 		Player black = new Player("Black", 1);
@@ -206,6 +210,10 @@ public class BoardPanel extends JPanel {
 			display(_logic.getCurPlayer());
 			_inTrueOrientation = true;
 		}
+	}
+
+	public void printMove(String notation) {
+		_mainPanel.printMove(notation);
 	}
 
 }
