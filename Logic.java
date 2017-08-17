@@ -54,6 +54,7 @@ public class Logic {
 
 			int prevRank = _pieceToMove.getRank();
 			int prevFile = _pieceToMove.getFile();
+
 			
 			if (!willCauseCheck(_pieceToMove, p)) {
 
@@ -64,7 +65,6 @@ public class Logic {
 				int nextRank = p.getRank();
 				int nextFile = p.getFile();
 				_pieceToMove.move(nextRank, nextFile);
-				p.remove();
 
 				_boardPanel.update(nextRank, nextFile);
 				_boardPanel.update(prevRank, prevFile);
@@ -162,7 +162,6 @@ public class Logic {
 			toReturn += "+";
 		}
 
-		System.out.println(toReturn);
 		return toReturn;
 	}
 
@@ -174,6 +173,7 @@ public class Logic {
 
 		// Check for mate
 		System.out.println("Checkmate for opponent: " + isCheckmate(_opponent));
+		removeEnpassant(_opponent);
 		Player tempPlayer = _curPlayer;
 		_curPlayer = _opponent;
 		_opponent = tempPlayer;
@@ -186,7 +186,7 @@ public class Logic {
 	}
 
 	public boolean inCheck(Player player, int rank, int file) {
-
+	
 		// inCheck can be called on any player so we check the opponent
 		// relative to 
 		Player opponent = (player == _curPlayer ? _opponent : _curPlayer);
@@ -205,6 +205,7 @@ public class Logic {
 	}
 
 	public boolean willCauseCheck(Piece toMove, Piece toTake) {
+
 
 		int prevRank = toMove.getRank();
 		int prevFile = toMove.getFile();
@@ -305,6 +306,22 @@ public class Logic {
 		_boardPanel.unhighlightSquare(_pieceToMove);
 		_selectionBeenMade = false;
 		_pieceToMove = null;
+	}
+
+	private void removeEnpassant(Player player) {
+		int rank;
+		if (player.getNum() == 0) {
+			rank = 2;
+		} else {
+			rank = 5;
+		}
+		
+		for (Piece p : _board[rank]) {
+			if (p instanceof EnpassantPiece) {
+				_board[p.getRank()][p.getFile()] = new NullPiece(p.getRank(), p.getFile(), this);
+				updateSquare(p.getRank(), p.getFile());
+			}
+		}
 	}
 
 

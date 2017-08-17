@@ -30,16 +30,17 @@ public class Pawn extends Piece {
 		}
 
 		int direction = (_player.getNum() == 0 ? 1 : -1);
+		Piece destination = _board[desiredRank][desiredFile];
 		if (desiredRank == _rank + direction) {
 			if (desiredFile == _file) {
-				return (_board[desiredRank][desiredFile].getPlayer() == null);
+				return (destination.getPlayer() == null);
 			} else if (Math.abs(desiredFile - _file) == 1) {
-				return (_board[desiredRank][desiredFile].getPlayer() != null);
+				return ((destination.getPlayer() != null && destination.getPlayer() != _player) || destination instanceof EnpassantPiece);
 			}
 		} else if (!_hasMoved && desiredRank == _rank + 2 * direction) {
 			if (desiredFile == _file) {
-				if (_board[desiredRank][desiredFile].getPlayer() == null) {
-					if (_board[_rank + direction][_file].getPlayer() == null) {
+				if (destination.getPlayer() == null) {
+					if (destination.getPlayer() == null) {
 						return true;
 					}
 				}
@@ -50,11 +51,23 @@ public class Pawn extends Piece {
 
 	@Override
 	public boolean move(int desiredRank, int desiredFile) {
+
+		boolean makesEnpassant = false;
+		int direction = (_player.getNum() == 0 ? 1 : -1);
+		if (desiredRank == _rank + 2 * direction) {
+			makesEnpassant = true;
+		}
+			
+
 		boolean success = super.move(desiredRank, desiredFile);
 
+
 		if (success) {
+			if (makesEnpassant) {
+				_board[_rank - direction][_file] = new EnpassantPiece(_rank - direction, _file, _logic, this);
+				_logic.updateSquare(_rank - direction, _file);
+			}
 			if (_rank == 0 || _rank == 7) {
-				System.out.println("PROMOTE");
 				this.promote();
 			}
 		}

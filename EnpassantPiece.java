@@ -1,12 +1,26 @@
 
 public class EnpassantPiece extends Piece {
 
-	public EnpassantPiece(int rank, int file, Player player, Piece[][] board, Logic logic) {
-		super(rank, file, player, board, logic);
+	private Piece _referencedPawn;
+
+	public EnpassantPiece(int rank, int file, Logic logic, Piece referencedPawn) {
+		super(rank, file, null, null, logic);
+		_referencedPawn = referencedPawn;
 	}
 
 	@Override
-	public boolean canMove(int desiredRank, int desiredFil) {
-		return false;
+	public String toString() {
+		return "Null";
 	}
+
+	@Override
+	public void remove() {
+		int rank = _referencedPawn.getRank();
+		int file = _referencedPawn.getFile();
+
+		_referencedPawn.remove();
+
+		_logic.updateSquare(rank, file);
+	}
+		
 }

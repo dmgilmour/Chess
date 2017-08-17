@@ -66,14 +66,15 @@ public abstract class Piece {
 	}
 
 	public boolean move(int desiredRank, int desiredFile) {
-		if (this.canMove(desiredRank, desiredFile)) {	
+		if (this.canMove(desiredRank, desiredFile)) {
 			_board[_rank][_file] = new NullPiece(_rank, _file, _logic);
 			this.setRank(desiredRank);
 			this.setFile(desiredFile);
+			_board[_rank][_file].remove();
 			_board[_rank][_file] = this;
 			_hasMoved = true;
 			return true;
-		} else {
+		} else { 
 			return false;
 		}
 	}
@@ -89,6 +90,7 @@ public abstract class Piece {
 	}
 
 	public void remove() {
+		_board[_rank][_file] = new NullPiece(_rank, _file, _logic);
 		_player.getPieces().remove(this);
 	}
 
@@ -106,6 +108,7 @@ public abstract class Piece {
 
 	class ClickListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
+			System.out.println("CL " + _this.getClass());
 			_logic.registerClick(_this);
 		}
 	}
