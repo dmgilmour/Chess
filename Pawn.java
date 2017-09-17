@@ -8,12 +8,8 @@ public class Pawn extends Piece {
 
 	private void promote() {
 		
-		//prompt the user
-
-		ArrayList<Piece> pieces = this.getPlayer().getPieces();
-		pieces.add(new Queen(_rank, _file, _player, _board, _logic));
 		this.remove();
-		_board[_rank][_file] = pieces.get(pieces.size() - 1);
+		PromotionHandler.getDesiredPiece(_rank, _file, _player, _board, _logic);
 	}
 		
 		

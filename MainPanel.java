@@ -6,11 +6,12 @@ import java.util.*;
 
 public class MainPanel extends JPanel {
 	
-	private BoardPanel _boardPanel = null;
-	private TopPanel _topPanel = null;
-	private SidePanel _sidePanel = null;
+	private BoardPanel _boardPanel;
+	private TopPanel _topPanel;
+	private SidePanel _sidePanel;
+    private MainWindow _window;
 
-	public MainPanel() {
+	public MainPanel(MainWindow window) {
 		
 		this.setLayout(new BorderLayout());
 
@@ -33,5 +34,9 @@ public class MainPanel extends JPanel {
 	public void printMove(String notation) {
 		_sidePanel.printMove(notation);
 	}
+
+    public MainWindow getWindow() {
+        return _window;
+    }
 		
 }

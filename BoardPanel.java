@@ -24,9 +24,13 @@ public class BoardPanel extends JPanel {
 
     Timer blinkTimer;
 
+    public static PromotionHandler promotionHandler;
+
 	public BoardPanel(MainPanel mainPanel) {
 
 		_mainPanel = mainPanel;
+
+        promotionHandler = new PromotionHandler(_mainPanel);
 
 		this.setLayout(new GridLayout(8, 8));
 
@@ -37,6 +41,7 @@ public class BoardPanel extends JPanel {
 	}
 
     public void newGame() {
+
 		Player white = new Player("White", 0);
 		Player black = new Player("Black", 1);
 		_board = new Piece[8][8];

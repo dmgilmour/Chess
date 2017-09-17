@@ -20,7 +20,7 @@ public class MainWindow extends JFrame {
 
 		this.setLayout(new FlowLayout());
 
-		_mainPanel = new MainPanel();
+		_mainPanel = new MainPanel(this);
 		_mainPanel.setMaximumSize(new Dimension(800, 800));
 
 
