@@ -197,7 +197,10 @@ public class Logic {
 	private void nextTurn() {
 
 		// Check for mate
-		System.out.println("Checkmate for opponent: " + isCheckmate(_opponent));
+        if (isCheckmate(_opponent)) {
+            System.out.println("Checkmate");
+            _boardPanel.newGame();
+        }
 		removeEnpassant(_opponent);
 		Player tempPlayer = _curPlayer;
 		_curPlayer = _opponent;
@@ -212,8 +215,6 @@ public class Logic {
 
 	public boolean inCheck(Player player, int rank, int file) {
 	
-		// inCheck can be called on any player so we check the opponent
-		// relative to 
 		Player opponent = (player == _curPlayer ? _opponent : _curPlayer);
 
 		for (Piece p : opponent.getPieces()) {
@@ -289,9 +290,10 @@ public class Logic {
 					System.out.println(blockingSquare);
 					for (Piece defender : player.getPieces()) {
 						System.out.println(defender);
-						System.out.println(defender.canMove(blockingSquare.getRank(), blockingSquare.getFile()));
 						if (defender.canMove(blockingSquare.getRank(), blockingSquare.getFile())) {
 							if (!willCauseCheck(defender, blockingSquare)) {
+                                System.out.println("Can Block!");
+                                System.out.println(defender.getRank() + " " + defender.getFile());
 								return false;
 							}
 						}

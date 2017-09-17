@@ -35,12 +35,14 @@ public class Pawn extends Piece {
 			if (desiredFile == _file) {
 				return (destination.getPlayer() == null);
 			} else if (Math.abs(desiredFile - _file) == 1) {
-				return ((destination.getPlayer() != null && destination.getPlayer() != _player) || destination instanceof EnpassantPiece);
+				return ((destination.getPlayer() != _player) && (destination.getPlayer() != null || (destination instanceof EnpassantPiece && ((EnpassantPiece) destination).enpassantOwner() != _player)));
 			}
 		} else if (!_hasMoved && desiredRank == _rank + 2 * direction) {
 			if (desiredFile == _file) {
 				if (destination.getPlayer() == null) {
 					if (destination.getPlayer() == null) {
+                        System.out.println("ayyo");
+                        System.out.println(_rank + " " + _file);
 						return true;
 					}
 				}
@@ -85,10 +87,11 @@ public class Pawn extends Piece {
 
 		if (canMove(_rank + direction, _file)) {
 			toReturn.add(_board[_rank + direction][_file]);
-			if (canMove(_rank + 2*direction, _file)) {
-				toReturn.add(_board[_rank + 2*direction][_file]); 
-			}
 		}
+
+        if (canMove(_rank + 2*direction, _file)) {
+            toReturn.add(_board[_rank + 2*direction][_file]); 
+        }
 
 		if (canMove(_rank + direction, _file + 1)) {
 			toReturn.add(_board[_rank + direction][_file + 1]); 

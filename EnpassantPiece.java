@@ -22,5 +22,9 @@ public class EnpassantPiece extends Piece {
 
 		_logic.updateSquare(rank, file);
 	}
+
+    public Player enpassantOwner() {
+        return _referencedPawn.getPlayer();
+    }
 		
 }

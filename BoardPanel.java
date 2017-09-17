@@ -9,10 +9,12 @@ public class BoardPanel extends JPanel {
 	private static final int BLINK_TIME = 200;
 	private static final int BLINK_COUNT = 3;
 
+    private static final int BUTTON_SIZE = 90;
+
 	private static final Color LIGHT_SQUARE_COLOR = new Color(0xf0d9b5);
 	private static final Color DARK_SQUARE_COLOR = new Color(0xb58863);
 
-	private MainPanel _mainPanel;
+	public MainPanel _mainPanel;
 
 	private Piece[][] _board;
 	private JPanel[][] _display;
@@ -20,10 +22,21 @@ public class BoardPanel extends JPanel {
 	private Logic _logic;
 	private boolean _inTrueOrientation = true;
 
+    Timer blinkTimer;
+
 	public BoardPanel(MainPanel mainPanel) {
 
 		_mainPanel = mainPanel;
 
+		this.setLayout(new GridLayout(8, 8));
+
+		_squares = makeSquares();
+		_display = makeDisplay();
+
+        newGame();
+	}
+
+    public void newGame() {
 		Player white = new Player("White", 0);
 		Player black = new Player("Black", 1);
 		_board = new Piece[8][8];
@@ -33,15 +46,8 @@ public class BoardPanel extends JPanel {
 				_board[i][j] = new NullPiece(i, j, _logic);
 			}
 		}
-
 		white.initializePieces(_board, _logic);
 		black.initializePieces(_board, _logic);
-
-		this.setLayout(new GridLayout(8, 8));
-
-		_squares = makeSquares();
-		_display = makeDisplay();
-
 		for (Piece[] row : _board) {
 			for (Piece p : row) {
 				this.update(p);
@@ -49,19 +55,19 @@ public class BoardPanel extends JPanel {
 		}
 
 		display(white);
-	}
+    }
+
 
 	private JButton[][] makeSquares() {
 		JButton[][] squares = new JButton[8][8];
 		for (int i = 0; i < 8; i++) {
 			for (int j = 0; j < 8; j++) {
 				JButton sq = new JButton();
-				sq.setPreferredSize(new Dimension(100, 100));
-				sq.setMaximumSize(new Dimension(150, 150));
+				sq.setPreferredSize(new Dimension(BUTTON_SIZE, BUTTON_SIZE));
 				if ((i + j) % 2 == 0) {
-					sq.setBackground(LIGHT_SQUARE_COLOR);
-				} else {
 					sq.setBackground(DARK_SQUARE_COLOR);
+				} else {
+					sq.setBackground(LIGHT_SQUARE_COLOR);
 				}
 				squares[i][j] = sq;
 			}
@@ -146,7 +152,7 @@ public class BoardPanel extends JPanel {
 		sq.addActionListener(piece.getListener());
 
 		ImageIcon image = new ImageIcon(getClass().getResource(("resources/" + piece.toString() + ".png")));
-		image = new ImageIcon(image.getImage().getScaledInstance(110, 110,  java.awt.Image.SCALE_SMOOTH));
+		image = new ImageIcon(image.getImage().getScaledInstance(BUTTON_SIZE, BUTTON_SIZE,  java.awt.Image.SCALE_SMOOTH));
 		sq.setIcon(image);
 	}
 
@@ -159,9 +165,9 @@ public class BoardPanel extends JPanel {
 		JButton sq = _squares[rank][file];
 		Color prevColor = sq.getBackground();
 
-		Timer blinkTimer = new Timer(BLINK_TIME, new ActionListener() {
+		blinkTimer = new Timer(BLINK_TIME, new ActionListener() {
 			private int count = 0;
-			private boolean active = false;
+			public boolean active = false;
 
 			public void actionPerformed(ActionEvent e) {
 				if (count >= BLINK_COUNT) {
@@ -195,10 +201,13 @@ public class BoardPanel extends JPanel {
 	}
 
 	public void unhighlightSquare(int rank, int file) {
+        if (blinkTimer != null) {
+            blinkTimer.stop();
+        }
 		if ((rank + file) % 2 == 0) {
-			_squares[rank][file].setBackground(LIGHT_SQUARE_COLOR);
-		} else {
 			_squares[rank][file].setBackground(DARK_SQUARE_COLOR);
+		} else {
+			_squares[rank][file].setBackground(LIGHT_SQUARE_COLOR);
 		}
 	}
 	
