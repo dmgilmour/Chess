@@ -15,17 +15,21 @@ public class MainPanel extends JPanel {
 		
 		this.setLayout(new BorderLayout());
 
+		_sidePanel = new SidePanel();
+		_topPanel = new TopPanel(this);
 		_boardPanel = new BoardPanel(this);
 
-		_topPanel = new TopPanel(this);
 
-		_sidePanel = new SidePanel();
 
 		add(_topPanel, BorderLayout.NORTH);
 		add(_boardPanel, BorderLayout.CENTER);
 		add(_sidePanel, BorderLayout.EAST);
 		this.setVisible(true);
 	}
+
+    public void resign() {
+        _boardPanel.newGame();
+    }
 
 	public void flipBoard() {
 		_boardPanel.flipBoard();
@@ -37,6 +41,10 @@ public class MainPanel extends JPanel {
 
     public MainWindow getWindow() {
         return _window;
+    }
+
+    public void clearSidebar() {
+        _sidePanel.clearText();
     }
 		
 }

@@ -42,6 +42,8 @@ public class BoardPanel extends JPanel {
 
     public void newGame() {
 
+        _mainPanel.clearSidebar();
+
 		Player white = new Player("White", 0);
 		Player black = new Player("Black", 1);
 		_board = new Piece[8][8];
