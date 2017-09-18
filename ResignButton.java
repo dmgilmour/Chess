@@ -7,7 +7,7 @@ public class ResignButton extends JButton {
     private MainPanel _mainPanel;
 
     public ResignButton(MainPanel mainPanel) {
-        super("Resign");
+        super("Reset");
         _mainPanel = mainPanel;
         addActionListener(new ResignListener());
     }

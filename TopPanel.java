@@ -6,15 +6,12 @@ import java.util.*;
 
 public class TopPanel extends JPanel {
 	
-	FlipButton _flipButton;
-    ResignButton _resignButton;
-
 	public TopPanel(MainPanel mainPanel) {
 		
-		_resignButton = new ResignButton(mainPanel);
-		_flipButton = new FlipButton(mainPanel);
+		ResignButton resignButton = new ResignButton(mainPanel);
+		FlipButton flipButton = new FlipButton(mainPanel);
 
-        add(_resignButton);
-		add(_flipButton);
+        add(resignButton);
+		add(flipButton);
 	}
 }
