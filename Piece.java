@@ -70,8 +70,9 @@ public abstract class Piece {
 			_board[_rank][_file] = new NullPiece(_rank, _file, _logic);
 			this.setRank(desiredRank);
 			this.setFile(desiredFile);
-			_board[_rank][_file].remove();
+			Piece toRemove = _board[_rank][_file];
 			_board[_rank][_file] = this;
+			toRemove.remove();
 			_hasMoved = true;
 			return true;
 		} else { 
@@ -90,7 +91,9 @@ public abstract class Piece {
 	}
 
 	public void remove() {
-		_board[_rank][_file] = new NullPiece(_rank, _file, _logic);
+		if (_board[_rank][_file] == this) {
+			_board[_rank][_file] = new NullPiece(_rank, _file, _logic);
+		}
 		_player.getPieces().remove(this);
 	}
 

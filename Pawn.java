@@ -62,7 +62,7 @@ public class Pawn extends Piece {
 
 		if (success) {
 			if (makesEnpassant) {
-				_board[_rank - direction][_file] = new EnpassantPiece(_rank - direction, _file, _logic, this);
+				_board[_rank - direction][_file] = new EnpassantPiece(_rank - direction, _file, _board, _logic, this);
 				_logic.updateSquare(_rank - direction, _file);
 			}
 			if (_rank == 0 || _rank == 7) {
